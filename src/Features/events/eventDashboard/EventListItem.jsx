@@ -2,8 +2,7 @@ import React from "react";
 import { Button, Icon, Item, List, Segment } from "semantic-ui-react";
 import EventListAttendee from "./EventListAttendee";
 
-export default function EventListItem({ event }) {
-  console.log("event", event);
+export default function EventListItem({ event, selectEvent }) {
   return (
     <Segment.Group>
       <Segment>
@@ -21,21 +20,28 @@ export default function EventListItem({ event }) {
       <Segment>
         <span>
           <Icon name="clock" />
-          {event.Date}
+          {event.date}
           <Icon name="marker" />
-          {event.Venue}
+          {event.city}
         </span>
       </Segment>
 
       <Segment secondary clearing>
         <List horizontal>
-          <EventListAttendee />
+          {event.attendees.map((attendee) => (
+            <EventListAttendee key={attendee.id} attendee={attendee} />
+          ))}
         </List>
       </Segment>
 
       <Segment clearing>
         <span>{event.description} </span>
-        <Button color="teal" floated="right" content="view" />
+        <Button
+          color="teal"
+          floated="right"
+          content="view"
+          onClick={() => selectEvent(event)}
+        />
       </Segment>
     </Segment.Group>
   );

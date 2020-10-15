@@ -1,7 +1,7 @@
 import { Button, Container, Image, Menu } from "semantic-ui-react";
 import React from "react";
 
-export default function NavBar() {
+export default function NavBar({ setFormOpen }) {
   return (
     <Menu inverted fixed="top">
       <Container>
@@ -15,7 +15,12 @@ export default function NavBar() {
         </Menu.Item>
         <Menu.Item name="Events"></Menu.Item>
         <Menu.Item>
-          <Button positive inverted content="Create Event" />
+          <Button
+            onClick={() => setFormOpen(true)}
+            positive
+            inverted
+            content="Create Event"
+          />
         </Menu.Item>
 
         <Menu.Item position="right">

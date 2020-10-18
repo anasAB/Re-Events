@@ -4,10 +4,17 @@ import "./App/layout/Style.css";
 import App from "./App/layout/App";
 import * as serviceWorker from "./serviceWorker";
 import "semantic-ui-css/semantic.min.css";
+import { BrowserRouter } from "react-router-dom";
+
 const rootEl = document.getElementById("root");
 
 function render() {
-  ReactDOM.render(<App />, rootEl);
+  ReactDOM.render(
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
+    rootEl
+  );
 }
 
 if (module.hot) {

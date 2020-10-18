@@ -24,8 +24,8 @@ export default function EventDashboard({
         event.id === updatedEvent.id ? updatedEvent : event
       )
     );
-    selectEvent(null);
   }
+
   //**! Delete Event */
   function handleDeleteEvent(eventId) {
     setEvent(events.filter((event) => event.id !== eventId));

@@ -1,40 +1,46 @@
-import { Button, Container, Image, Menu } from "semantic-ui-react";
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Container, Menu } from "semantic-ui-react";
+import { NavLink, useHistory } from "react-router-dom";
+import logo from "../../assests/logo.png";
+import SignedInMenu from "./SignedInMenu";
+import SignOut from "./SignOut";
 
 export default function NavBar({ setFormOpen }) {
+  /**
+   *! Fake Authentication
+   */
+  const [authenticated, setAuthenticated] = useState(false);
+  const history = useHistory();
+
+  /**
+   * ! LogOut Handler sending User back when logOut
+   */
+  function handleSignOut() {
+    setAuthenticated(false);
+    history.push("./");
+  }
+
   return (
     <Menu inverted fixed="top">
       <Container>
-        <Menu.Item exact as={NavLink} to="" header>
-          <Image
-            src="/public/assets/logo.png"
-            alt="logo"
-            style={{ marginRight: 15 }}
-          />
-          Re-Event
+        <Menu.Item as={NavLink} exact to="/" header>
+          <img src={logo} alt="logo" />
+          Re-vents
         </Menu.Item>
 
         <Menu.Item as={NavLink} to="events" name="Events"></Menu.Item>
 
-        <Menu.Item as={NavLink} to="createEvent">
-          <Button
-            onClick={() => setFormOpen(true)}
-            positive
-            inverted
-            content="Create Event"
-          />
-        </Menu.Item>
+        {authenticated && (
+          <Menu.Item as={NavLink} to="createEvent">
+            <Button positive inverted content="Create Event" />
+          </Menu.Item>
+        )}
 
-        <Menu.Item position="right">
-          <Button basic inverted content="Login" />
-          <Button
-            basic
-            inverted
-            content="Register"
-            style={{ margin: "0.5em" }}
-          />
-        </Menu.Item>
+        {authenticated ? (
+          <SignedInMenu handleSignOut={handleSignOut} />
+        ) : (
+          <SignOut setAuthenticated={setAuthenticated} />
+        )}
       </Container>
     </Menu>
   );

@@ -1,30 +1,24 @@
 import React, { useState } from "react";
 import { Grid } from "semantic-ui-react";
-import EventForm from "../eventForm/EventForm";
 import EventList from "./EventList";
 import { sampleData } from "../../../App/api/sampleData.js";
 
-export default function EventDashboard({
-  formOpen,
-  setFormOpen,
-  selectEvent,
-  selecteDEvent,
-}) {
+export default function EventDashboard() {
   const [events, setEvent] = useState(sampleData);
 
-  //**!Create Event */
-  function handleCreateEvent(event) {
-    setEvent([...events, event]);
-  }
+  // //**!Create Event */
+  // function handleCreateEvent(event) {
+  //   setEvent([...events, event]);
+  // }
 
-  //**! Updated Event */
-  function handleUpatedEvent(updatedEvent) {
-    setEvent(
-      events.map((event) =>
-        event.id === updatedEvent.id ? updatedEvent : event
-      )
-    );
-  }
+  // //**! Updated Event */
+  // function handleUpatedEvent(updatedEvent) {
+  //   setEvent(
+  //     events.map((event) =>
+  //       event.id === updatedEvent.id ? updatedEvent : event
+  //     )
+  //   );
+  // }
 
   //**! Delete Event */
   function handleDeleteEvent(eventId) {
@@ -34,23 +28,10 @@ export default function EventDashboard({
   return (
     <Grid>
       <Grid.Column width={10}>
-        <EventList
-          events={events}
-          selectEvent={selectEvent}
-          deleteEvent={handleDeleteEvent}
-        />
+        <EventList events={events} deleteEvent={handleDeleteEvent} />
       </Grid.Column>
       <Grid.Column width={6}>
-        {formOpen && (
-          <EventForm
-            setFormOpen={setFormOpen}
-            setEvent={setEvent}
-            createEvent={handleCreateEvent}
-            selecteDEvent={selecteDEvent}
-            updateEvent={handleUpatedEvent}
-            key={selecteDEvent ? selecteDEvent.id : null}
-          />
-        )}
+        <h2>Evnet Filters</h2>
       </Grid.Column>
     </Grid>
   );

@@ -5,6 +5,7 @@ import App from "./App/layout/App";
 import * as serviceWorker from "./serviceWorker";
 import "semantic-ui-css/semantic.min.css";
 import { BrowserRouter } from "react-router-dom";
+import "./index.css";
 
 const rootEl = document.getElementById("root");
 

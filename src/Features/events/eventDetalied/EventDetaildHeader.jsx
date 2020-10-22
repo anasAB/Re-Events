@@ -1,25 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Header, Image, Item, Segment } from "semantic-ui-react";
-import drinking from "../../../assests/drinks.jpg";
-export default function EventDetaildHeader() {
+
+export default function EventDetaildHeader({ event }) {
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
-        <Image src={drinking} fluid />
-
+        <Image src={`/assets/${event.category}.jpg`} fluid />
         <Segment basic>
           <Item.Group>
             <Item>
               <Item.Content>
                 <Header
                   size="huge"
-                  content="Event Title"
+                  content={event.title}
                   style={{ color: "white" }}
                 />
-                <p>Event Date</p>
+                <p>{event.date}</p>
                 <p>
-                  Hosted by <strong>Bob</strong>
+                  Hosted by <strong>{event.hostedBy}</strong>
                 </p>
               </Item.Content>
             </Item>

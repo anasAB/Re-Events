@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Icon, Item, List, Segment } from "semantic-ui-react";
 import EventListAttendee from "./EventListAttendee";
-import user from "../../../assests/user.png";
 import { Link } from "react-router-dom";
 
 export default function EventListItem({ event, selectEvent, deleteEvent }) {
@@ -10,47 +9,42 @@ export default function EventListItem({ event, selectEvent, deleteEvent }) {
       <Segment>
         <Item.Group>
           <Item>
-            <Item.Image size="tiny" circular src={user} />
+            <Item.Image size="tiny" circular src={event.hostPhotoURL} />
+
             <Item.Content>
               <Item.Header content={event.title} />
-              <Item.Description>{event.hostedBy}</Item.Description>
+              <Item.Description>Hosted by {event.hostedBy}</Item.Description>
             </Item.Content>
           </Item>
         </Item.Group>
       </Segment>
-
       <Segment>
         <span>
-          <Icon name="clock" />
-          {event.date}
-          <Icon name="marker" />
-          {event.city}
+          <Icon name="clock" /> {event.date}
+          <Icon name="marker" /> {event.venue}
         </span>
       </Segment>
-
-      <Segment secondary clearing>
+      <Segment secondary>
         <List horizontal>
           {event.attendees.map((attendee) => (
             <EventListAttendee key={attendee.id} attendee={attendee} />
           ))}
         </List>
       </Segment>
-
       <Segment clearing>
-        <span>{event.description} </span>
+        <div>{event.description}</div>
+        <Button
+          onClick={() => deleteEvent(event.id)}
+          color="red"
+          floated="right"
+          content="Delete"
+        />
         <Button
           as={Link}
-          to={`/event/${event.id}`}
+          to={`/events/${event.id}`}
           color="teal"
           floated="right"
-          content="view"
-        />
-
-        <Button
-          color="red"
-          onClick={() => deleteEvent(event.id)}
-          floated="left"
-          content="delete"
+          content="View"
         />
       </Segment>
     </Segment.Group>

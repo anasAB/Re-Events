@@ -6,14 +6,19 @@ import * as serviceWorker from "./serviceWorker";
 import "semantic-ui-css/semantic.min.css";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
+import { Provider } from "react-redux";
+import { configuration } from "./App/store/ConfigureStore";
 
 const rootEl = document.getElementById("root");
+const store = configuration();
 
 function render() {
   ReactDOM.render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>,
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>,
     rootEl
   );
 }

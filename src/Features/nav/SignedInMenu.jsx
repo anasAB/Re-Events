@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function SignedInMenu({ handleSignOut }) {
   return (
     <Menu.Item position="right">
-      <Image avatar spaced="right" />
+      <Image avatar spaced="right" src=".." />
 
       <Dropdown pointing="top left" text="Bob">
         <Dropdown.Menu>

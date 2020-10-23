@@ -2,8 +2,6 @@ import React from "react";
 import { Button, Grid, Icon, Segment } from "semantic-ui-react";
 
 export default function EventDetaildInfo({ event }) {
-  console.log("EventDetaildInfo", event);
-
   return (
     <Segment.Group>
       <Segment attached="top">

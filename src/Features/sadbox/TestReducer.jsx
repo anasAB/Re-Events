@@ -1,18 +1,47 @@
+import {
+  asyncActionERROR,
+  asyncActionFINISH,
+  asyncActionStart,
+} from "../../App/async/asyncReducer";
+import { delay } from "../../App/common/util/util";
+
 export const INCREMENT_COUNTER = "INCREMENT_COUNTER";
 export const DECREMENT_COUNTER = "DECREMENT_COUNTER";
 
 //! Create Action Creator
 export function increment(amount) {
-  return {
-    type: INCREMENT_COUNTER,
-    payload: amount,
+  // return {
+  //   type: INCREMENT_COUNTER,
+  //   payload: amount,
+  // };
+
+  //**! with Async function*/
+  return async function (dispatch) {
+    dispatch(asyncActionStart());
+    try {
+      await delay(1000);
+      dispatch({ type: INCREMENT_COUNTER, payload: amount });
+      dispatch(asyncActionFINISH());
+    } catch (error) {
+      dispatch(asyncActionERROR(error));
+    }
   };
 }
 
 export function decrement(amount) {
-  return {
-    type: DECREMENT_COUNTER,
-    payload: amount,
+  // return {
+  //   type: DECREMENT_COUNTER,
+  //   payload: amount,
+  // };
+  return async function (dispatch) {
+    dispatch(asyncActionStart());
+    try {
+      await delay(1000);
+      dispatch({ type: DECREMENT_COUNTER, payload: amount });
+      dispatch(asyncActionFINISH());
+    } catch (error) {
+      dispatch(asyncActionERROR(error));
+    }
   };
 }
 

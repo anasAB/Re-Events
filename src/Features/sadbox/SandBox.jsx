@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "semantic-ui-react";
 import { openModal } from "../../App/common/modal/ModalReducer";
@@ -9,20 +9,32 @@ export default function SandBox() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.test.data);
   const state = useSelector((state) => state.test.data);
+  const { loading } = useSelector((state) => state.async);
+  const [target, setTarget] = useState();
   return (
     <>
       <h2>Test</h2>
       <h2>the Data is : {data}</h2>
       <Button
+        name="Increment"
+        loading={loading && target === "Increment"}
         content="Increment"
         color="green"
-        onClick={() => dispatch(increment(3))}
+        onClick={(e) => {
+          dispatch(increment(3));
+          setTarget(e.target.name);
+        }}
       />
 
       <Button
+        name="Decrement"
+        loading={loading && target === "Decrement"}
         content="Decrement"
         color="red"
-        onClick={() => dispatch(decrement(2))}
+        onClick={(e) => {
+          dispatch(decrement(2));
+          setTarget(e.target.name);
+        }}
       />
       <Button
         content="Open Model"

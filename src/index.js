@@ -4,6 +4,7 @@ import "./App/layout/Style.css";
 import App from "./App/layout/App";
 import * as serviceWorker from "./serviceWorker";
 import "semantic-ui-css/semantic.min.css";
+import "react-calendar/dist/Calendar.css";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { Provider } from "react-redux";
@@ -11,9 +12,11 @@ import { configuration } from "./App/store/ConfigureStore";
 import ScrollToTop from "./App/layout/ScrollToTop";
 import ReduxToastr from "react-redux-toastr";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
+import { loadEvents } from "./Features/events/EventsActions";
 
 const rootEl = document.getElementById("root");
 const store = configuration();
+store.dispatch(loadEvents());
 
 function render() {
   ReactDOM.render(

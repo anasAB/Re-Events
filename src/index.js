@@ -12,11 +12,9 @@ import { configuration } from "./App/store/ConfigureStore";
 import ScrollToTop from "./App/layout/ScrollToTop";
 import ReduxToastr from "react-redux-toastr";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
-import { loadEvents } from "./Features/events/EventsActions";
 
 const rootEl = document.getElementById("root");
 const store = configuration();
-store.dispatch(loadEvents());
 
 function render() {
   ReactDOM.render(

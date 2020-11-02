@@ -7,6 +7,7 @@ import EventForm from "../../Features/events/eventForm/EventForm";
 import HomePage from "../../Features/home/HomePage";
 import NavBar from "../../Features/nav/NavBar";
 import SandBox from "../../Features/sadbox/SandBox";
+import ErrorComponent from "../common/errors/errorComponent";
 import ModalManger from "../common/modal/ModalManger";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                 component={EventForm}
                 key={key}
               />
+              <Route path="/error" component={ErrorComponent} />
 
               <Route path="/test" component={SandBox} />
             </Container>

@@ -26,6 +26,13 @@ const toastrOptions = {
 };
 
 //! Action Creators
+export function listenToEvents(events) {
+  return {
+    type: FETCH_EVENTS,
+    payload: events,
+  };
+}
+
 export function loadEvents(payload) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
@@ -41,6 +48,7 @@ export function loadEvents(payload) {
     }
   };
 }
+
 export function creatEvent(payload) {
   return {
     type: CREATE_EVENT,

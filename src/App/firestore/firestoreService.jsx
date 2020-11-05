@@ -1,17 +1,25 @@
 import firebase from "../config/firebase.js";
-import { isDate } from "lodash";
+import cuid from "cuid";
+
 const db = firebase.firestore();
 
-//! Shape the data to be usable
+//**! Shape the data to be usable */
 export function dataFromSnapShot(snapshot) {
   if (!snapshot.exists) return undefined;
   const data = snapshot.data();
 
-  if (!isDate(data.date)) {
-    return { ...data, date: data.date.toDate() };
+  for (const prop in data) {
+    if (data.hasOwnProperty(prop)) {
+      if (data[prop] instanceof firebase.firestore.Timestamp) {
+        data[prop] = data[prop].toDate();
+      }
+    }
   }
 
-  return { ...data, id: snapshot.id };
+  return {
+    ...data,
+    id: snapshot.id,
+  };
 }
 
 export function listenEventsFromFirestore() {
@@ -19,6 +27,36 @@ export function listenEventsFromFirestore() {
 }
 
 export function listenToEventFromFirestore(eventId) {
-  console.log("EVENT FROM STORE", db.collection("events").doc(eventId));
   return db.collection("events").doc(eventId);
+}
+
+//**! Add Event*/
+export function addEventToFirestore(event) {
+  return db.collection("events").add({
+    ...event,
+    hostedBy: "ME new User",
+    hostPhotoURL: "https://randomuser.me/api/portraits/women/22.jpg",
+    attendees: firebase.firestore.FieldValue.arrayUnion({
+      id: cuid(),
+      name: "Me",
+      photoURL: "https://randomuser.me/api/portraits/women/72.jpg",
+    }),
+  });
+}
+
+//**! Updated Event*/
+export function updateEventToFirestore(event) {
+  return db.collection("events").doc(event.id).update(event);
+}
+
+//**! Deleted Event*/
+export function deletedEventFromFirestore(eventId) {
+  return db.collection("events").doc(eventId).delete();
+}
+
+//**! Cancel Event */
+export function cancelEventToggle(event) {
+  return db.collection("events").doc(event.id).update({
+    isCancelled: !event.isCancelled,
+  });
 }

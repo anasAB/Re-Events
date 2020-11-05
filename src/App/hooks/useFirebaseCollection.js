@@ -20,6 +20,8 @@ export default function useFirestoreCollection({ query, data, deps }) {
       },
       (error) => dispatch(asyncActionERROR())
     );
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+    };
   }, deps); // eslint-disable-line
 }

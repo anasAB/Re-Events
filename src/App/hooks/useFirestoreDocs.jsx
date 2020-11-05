@@ -6,16 +6,16 @@ import {
   asyncActionStart,
 } from "../async/asyncReducer";
 import { dataFromSnapShot } from "../firestore/firestoreService";
-import { toastr } from "react-redux-toastr";
 
-export default function useFirestoreDocs({ query, data, deps }) {
+export default function useFirestoreDocs({ query, data, deps, shouldExecute }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!shouldExecute) return;
+
     dispatch(asyncActionStart());
     const unsubscribe = query().onSnapshot(
       (snapshot) => {
-        console.log("snapshot=---->", snapshot.data());
         if (!snapshot.exists) {
           dispatch(
             asyncActionERROR({
@@ -23,13 +23,19 @@ export default function useFirestoreDocs({ query, data, deps }) {
               message: "Could not Find Docu",
             })
           );
-          toastr.error("There is no such event with this ID");
-          dispatch(asyncActionFINISH());
+
           return;
         }
         data(dataFromSnapShot(snapshot));
+        dispatch(asyncActionFINISH());
       },
-      (error) => dispatch(asyncActionERROR())
+      (error) =>
+        dispatch(
+          asyncActionERROR({
+            code: "userFireStoreDocs",
+            message: "Check userFireStoreDocs Component",
+          })
+        )
     );
     return unsubscribe;
   }, deps); // eslint-disable-line

@@ -1,11 +1,28 @@
-import React from "react";
-import { Button, Icon, Item, Label, List, Segment } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Button, Confirm, Item, Label, List, Segment } from "semantic-ui-react";
 import EventListAttendee from "./EventListAttendee";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import { deletedEventFromFirestore } from "../../../App/firestore/firestoreService";
+import { toastr } from "react-redux-toastr";
 
 export default function EventListItem({ event }) {
+  //**! Handle Delete Event */
+  const [confromOpen, setConfromOpen] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
+  async function handleDeleteEvent(event) {
+    setConfromOpen(false);
+    setLoadingDelete(true);
+    try {
+      await deletedEventFromFirestore(event);
+      toastr.warning("Are you sure you want to Delete this event ?");
+      setLoadingDelete(false);
+    } catch (error) {
+      toastr.error(error.message);
+      setLoadingDelete(true);
+    }
+  }
+
   return (
     <Segment.Group>
       <Segment>
@@ -30,21 +47,25 @@ export default function EventListItem({ event }) {
       </Segment>
       <Segment>
         <span>
-          <Icon name="clock" /> {format(event.date, "MMMM d, yyyy h:mm a")}
-          <Icon name="marker" /> {event.venue}
+          {/* <Icon name="clock" /> {format(event.date, "MMMM d, yyyy h:mm a")} */}
+          {/* <Icon name="clock" /> <span>{event.date}</span>
+          <Icon name="marker" /> {event.venue} */}
         </span>
       </Segment>
       <Segment secondary>
         <List horizontal>
-          {event.attendees.map((attendee) => (
-            <EventListAttendee key={attendee.id} attendee={attendee} />
-          ))}
+          {event.attendee &&
+            event.attendees.map((attendee) => (
+              <EventListAttendee key={attendee.id} attendee={attendee} />
+            ))}
         </List>
       </Segment>
       <Segment clearing>
         <div>{event.description}</div>
         <Button
-          onClick={() => deletedEventFromFirestore(event.id)}
+          // onClick={() => deletedEventFromFirestore(event.id)}
+          onClick={() => setConfromOpen(true)}
+          name="delete"
           color="red"
           floated="right"
           content="Delete"
@@ -57,6 +78,11 @@ export default function EventListItem({ event }) {
           content="View"
         />
       </Segment>
+      <Confirm
+        open={confromOpen}
+        onCancel={() => setConfromOpen(false)}
+        onConfirm={() => handleDeleteEvent(event)}
+      />
     </Segment.Group>
   );
 }

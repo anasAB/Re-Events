@@ -38,7 +38,7 @@ export function addEventToFirestore(event) {
     hostPhotoURL: "https://randomuser.me/api/portraits/women/22.jpg",
     attendees: firebase.firestore.FieldValue.arrayUnion({
       id: cuid(),
-      name: "Me",
+      displayName: "Me",
       photoURL: "https://randomuser.me/api/portraits/women/72.jpg",
     }),
   });

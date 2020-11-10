@@ -6,21 +6,22 @@ import { Button, Label } from "semantic-ui-react";
 import MyTextInput from "../../App/common/form/MyTextInput";
 import { useDispatch } from "react-redux";
 import { closeModal } from "../../App/common/modal/ModalReducer";
-import { signInWithEmail } from "../../App/firestore/fireBaseService";
+import { registerUser } from "../../App/firestore/fireBaseService";
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const dispatch = useDispatch();
   return (
-    <ModalWrapper size="large" header="Sign in">
+    <ModalWrapper size="large" header="Register">
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ displayName: "", email: "", password: "" }}
         validationSchema={yup.object({
+          displayName: yup.string().required(),
           email: yup.string().required().email(),
           password: yup.string().required(),
         })}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
-            await signInWithEmail(values);
+            await registerUser(values);
             setSubmitting(false);
             dispatch(closeModal());
           } catch (error) {
@@ -31,7 +32,8 @@ export default function LoginForm() {
       >
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form className="ui form">
-            <MyTextInput name="email" placeholder="password" />
+            <MyTextInput name="displayName" placeholder="DisplayName" />
+            <MyTextInput name="email" placeholder="email" />
             <MyTextInput
               name="password"
               placeholder="Password"
@@ -52,7 +54,7 @@ export default function LoginForm() {
               color={!isValid || !dirty || isSubmitting ? "red" : "green"}
               size="large"
               fluid
-              content="LogIn"
+              content="Register"
             />
           </Form>
         )}

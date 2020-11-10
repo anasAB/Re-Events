@@ -1,10 +1,24 @@
+import firebase from "../../App/config/firebase.js";
+
 export const SIGN_IN = "SIGN_IN";
 export const SIGN_OUT = "SIGN_OUT";
 
-export function signIn(payload) {
+export function signInUser(user) {
   return {
     type: SIGN_IN,
-    payload,
+    payload: user,
+  };
+}
+
+export function verifyAuth() {
+  return function (dispatch) {
+    return firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(signInUser(user));
+      } else {
+        dispatch(signOut());
+      }
+    });
   };
 }
 

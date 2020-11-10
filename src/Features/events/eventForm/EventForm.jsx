@@ -136,7 +136,7 @@ export default function EventForm({ match, history }) {
             <MyDateInput
               name="date"
               placeholderText="date"
-              timeFormat="HH:mm"
+              timeFormat="dd LLL yyyy h:mm a"
               showTimeSelect
               timeCaption="time"
               dateFormat="MMMM d, yyyy h:m a"

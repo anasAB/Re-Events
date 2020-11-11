@@ -11,11 +11,9 @@ export default function EventListItem({ event }) {
   const [loadingDelete, setLoadingDelete] = useState(false);
 
   async function handleDeleteEvent(event) {
-    setConfromOpen(false);
     setLoadingDelete(true);
     try {
       await deletedEventFromFirestore(event);
-      toastr.warning("Are you sure you want to Delete this event ?");
       setLoadingDelete(false);
     } catch (error) {
       toastr.error(error.message);
@@ -64,7 +62,9 @@ export default function EventListItem({ event }) {
         <div>{event.description}</div>
         <Button
           // onClick={() => deletedEventFromFirestore(event.id)}
-          onClick={() => setConfromOpen(true)}
+          onClick={() => {
+            deletedEventFromFirestore(event.id);
+          }}
           name="delete"
           color="red"
           floated="right"

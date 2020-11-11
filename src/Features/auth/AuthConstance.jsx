@@ -1,3 +1,4 @@
+import { APP_LOADED } from "../../App/async/asyncReducer.jsx";
 import firebase from "../../App/config/firebase.js";
 
 export const SIGN_IN = "SIGN_IN";
@@ -15,8 +16,10 @@ export function verifyAuth() {
     return firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         dispatch(signInUser(user));
+        dispatch({ type: APP_LOADED });
       } else {
         dispatch(signOut());
+        dispatch({ type: APP_LOADED });
       }
     });
   };
@@ -40,7 +43,13 @@ export default function authReducer(state = InitialState, { type, payload }) {
       return {
         ...state,
         authenticated: true,
-        currentUser: { email: payload.email },
+        currentUser: {
+          email: payload.email,
+          photoURL: payload.photoURL,
+          uid: payload.uid,
+          displayName: payload.displayName,
+          providerId: payload.providerData[0].providerId,
+        },
       };
     case SIGN_OUT:
       return {

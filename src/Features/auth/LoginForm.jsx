@@ -2,16 +2,17 @@ import React from "react";
 import ModalWrapper from "../../App/common/modal/ModalWrapper";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
-import { Button, Label } from "semantic-ui-react";
+import { Button, Divider, Label } from "semantic-ui-react";
 import MyTextInput from "../../App/common/form/MyTextInput";
 import { useDispatch } from "react-redux";
 import { closeModal } from "../../App/common/modal/ModalReducer";
 import { signInWithEmail } from "../../App/firestore/fireBaseService";
+import SocialLogIn from "./SocialLogIn";
 
 export default function LoginForm() {
   const dispatch = useDispatch();
   return (
-    <ModalWrapper size="large" header="Sign in">
+    <ModalWrapper size="mini" header="Sign in">
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={yup.object({
@@ -31,7 +32,7 @@ export default function LoginForm() {
       >
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form className="ui form">
-            <MyTextInput name="email" placeholder="password" />
+            <MyTextInput name="email" placeholder="email" />
             <MyTextInput
               name="password"
               placeholder="Password"
@@ -54,6 +55,8 @@ export default function LoginForm() {
               fluid
               content="LogIn"
             />
+            <Divider horizontal>Or</Divider>
+            <SocialLogIn />
           </Form>
         )}
       </Formik>

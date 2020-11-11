@@ -23,7 +23,7 @@ export function dataFromSnapShot(snapshot) {
 }
 
 export function listenEventsFromFirestore() {
-  return db.collection("events");
+  return db.collection("events").orderBy("date");
 }
 
 export function listenToEventFromFirestore(eventId) {
@@ -58,5 +58,15 @@ export function deletedEventFromFirestore(eventId) {
 export function cancelEventToggle(event) {
   return db.collection("events").doc(event.id).update({
     isCancelled: !event.isCancelled,
+  });
+}
+
+//**! Set user Profile Data */
+export function setUserProfile(user) {
+  return db.collection("users").doc(user.uid).set({
+    displayName: user.displayName,
+    email: user.email,
+    photoURL: user.photoURL,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   });
 }

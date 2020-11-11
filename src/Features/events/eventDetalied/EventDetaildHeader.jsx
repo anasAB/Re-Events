@@ -16,7 +16,7 @@ export default function EventDetaildHeader({ event }) {
                   content={event.title}
                   style={{ color: "white" }}
                 />
-                <p>{event.date}</p>
+                {/* <p>{event.date}</p> */}
                 <p>
                   Hosted by <strong>{event.hostedBy}</strong>
                 </p>

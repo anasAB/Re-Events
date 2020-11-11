@@ -27,25 +27,10 @@ const toastrOptions = {
 
 //! Action Creators
 export function listenToEvents(events) {
+  console.log("listenToEvents", events);
   return {
     type: FETCH_EVENTS,
     payload: events,
-  };
-}
-
-export function loadEvents(payload) {
-  return async function (dispatch) {
-    dispatch(asyncActionStart());
-    try {
-      const events = await fetchSampleData();
-      await delay(1000);
-      dispatch({ type: FETCH_EVENTS, payload: events });
-      dispatch(asyncActionFINISH());
-      toastr.success("Data Has Been Fetched");
-    } catch (error) {
-      dispatch(asyncActionERROR(error));
-      toastr.error("There Is Something Wrong", error, toastrOptions);
-    }
   };
 }
 

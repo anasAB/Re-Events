@@ -1,6 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Route, useLocation } from "react-router-dom";
 import { Container } from "semantic-ui-react";
+import AccountPage from "../../Features/auth/AccountPage";
 import EventDashboard from "../../Features/events/eventDashboard/EventDashboard";
 import EventDetaildPage from "../../Features/events/eventDetalied/EventDetaildPage";
 import EventForm from "../../Features/events/eventForm/EventForm";
@@ -9,9 +11,13 @@ import NavBar from "../../Features/nav/NavBar";
 import SandBox from "../../Features/sadbox/SandBox";
 import ErrorComponent from "../common/errors/errorComponent";
 import ModalManger from "../common/modal/ModalManger";
+import LoadingComponent from "./LoadingComponent";
 
 function App() {
   const { key } = useLocation();
+  const { initialized } = useSelector((state) => state.async);
+
+  if (!initialized) return <LoadingComponent content="Loading The App..." />;
   return (
     <>
       <ModalManger />
@@ -30,8 +36,8 @@ function App() {
                 component={EventForm}
                 key={key}
               />
+              <Route path="/account" component={AccountPage} />
               <Route path="/error" component={ErrorComponent} />
-
               <Route path="/test" component={SandBox} />
             </Container>
           </>

@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { Button, Confirm, Header, Segment } from "semantic-ui-react";
 import { Link, Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { creatEvent, listenToEvents, updateEvent } from "../EventsActions";
+import { listenToEvents } from "../EventsActions";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MyTextInput from "../../../App/common/form/MyTextInput";
-import cuid from "cuid";
 import MyTextArea from "../../../App/common/form/MyTextArea";
 import MySelectInput from "../../../App/common/form/MySelectInput";
 import { categoryData } from "../../../App/api/categoryOptions";
@@ -55,20 +54,20 @@ export default function EventForm({ match, history }) {
     }
   }
 
-  function submitForm(values) {
-    selecteDEvent
-      ? dispatch(updateEvent({ ...selecteDEvent, ...values }))
-      : dispatch(
-          creatEvent({
-            ...values,
-            id: cuid(),
-            hostedBy: "Bob",
-            attendees: [],
-            hostPhotURL: "",
-          })
-        );
-    history.push("/events");
-  }
+  // function submitForm(values) {
+  //   selecteDEvent
+  //     ? dispatch(updateEvent({ ...selecteDEvent, ...values }))
+  //     : dispatch(
+  //         creatEvent({
+  //           ...values,
+  //           id: cuid(),
+  //           hostedBy: "Bob",
+  //           attendees: [],
+  //           hostPhotURL: "",
+  //         })
+  //       );
+  //   history.push("/events");
+  // }
 
   const initialValues = selecteDEvent ?? {
     id: "",

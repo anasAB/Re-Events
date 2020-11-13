@@ -8,6 +8,7 @@ import EventDetaildPage from "../../Features/events/eventDetalied/EventDetaildPa
 import EventForm from "../../Features/events/eventForm/EventForm";
 import HomePage from "../../Features/home/HomePage";
 import NavBar from "../../Features/nav/NavBar";
+import ProfilePage from "../../Features/profiles/profilePage/ProfilePage";
 import SandBox from "../../Features/sadbox/SandBox";
 import ErrorComponent from "../common/errors/errorComponent";
 import ModalManger from "../common/modal/ModalManger";
@@ -37,6 +38,7 @@ function App() {
                 key={key}
               />
               <Route path="/account" component={AccountPage} />
+              <Route path="/profile/:id" component={ProfilePage} />
               <Route path="/error" component={ErrorComponent} />
               <Route path="/test" component={SandBox} />
             </Container>

@@ -5,6 +5,7 @@ import { reducer as toastrReducer } from "react-redux-toastr";
 import modalReducer from "../common/modal/ModalReducer";
 import authReducer from "../../Features/auth/AuthConstance";
 import async from "../async/asyncReducer.jsx";
+import ProfileReducer from "../../Features/profiles/ProfileReducer";
 
 const rootReducer = combineReducers({
   test: testReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   modal: modalReducer,
   auth: authReducer,
   async: async,
+  profile: ProfileReducer,
 });
 
 export default rootReducer;

@@ -5,7 +5,7 @@ import SignedInMenu from "./SignedInMenu";
 import SignOut from "./SignOut";
 import { useSelector } from "react-redux";
 
-export default function NavBar({ setFormOpen }) {
+export default function NavBar() {
   /**
    *! Fake Authentication
    */

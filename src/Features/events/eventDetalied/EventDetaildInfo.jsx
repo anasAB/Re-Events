@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Grid, Icon, Segment } from "semantic-ui-react";
-import { format, parseISO } from "date-fns";
+// import { format, parseISO } from "date-fns";
 
 export default function EventDetaildInfo({ event }) {
   return (

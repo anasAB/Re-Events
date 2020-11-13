@@ -28,9 +28,10 @@ export default function EventForm({ match, history }) {
 
   const { loading, error } = useSelector((state) => state.async);
 
-  //** Cancel and Activeiate event*/
+  //**! Cancel and Activeiate event*/
   const [loadingCancel, setLoadingCancel] = useState(false);
   const [conformOpen, setConformOpen] = useState(false);
+
   const toastrOptions = {
     timeOut: 3000,
     transitionIn: "bounceIn",
@@ -53,21 +54,6 @@ export default function EventForm({ match, history }) {
       setLoadingCancel(true);
     }
   }
-
-  // function submitForm(values) {
-  //   selecteDEvent
-  //     ? dispatch(updateEvent({ ...selecteDEvent, ...values }))
-  //     : dispatch(
-  //         creatEvent({
-  //           ...values,
-  //           id: cuid(),
-  //           hostedBy: "Bob",
-  //           attendees: [],
-  //           hostPhotURL: "",
-  //         })
-  //       );
-  //   history.push("/events");
-  // }
 
   const initialValues = selecteDEvent ?? {
     id: "",
@@ -121,7 +107,7 @@ export default function EventForm({ match, history }) {
           }
         }}
       >
-        {({ isSubmitting, dirty, isValid, isCancelled }) => (
+        {({ isSubmitting, dirty, isValid }) => (
           <Form className="ui form">
             <MyTextInput name="title" placeholder="Title" />
             <MySelectInput

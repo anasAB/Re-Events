@@ -13,13 +13,6 @@ export default function EventDashboard() {
   const dispatch = useDispatch();
   const { events } = useSelector((state) => state.events);
   const { loading } = useSelector((state) => state.async);
-  console.log("EVENTS", events);
-
-  // useFirestoreCollection({
-  //   query: () => listenEventsFromFirestore(),
-  //   data: (events) => dispatch(listenToEvents(events)),
-  //   deps: [dispatch],
-  // });
 
   useFirestoreCollection({
     query: () => listenEventsFromFirestore(),
@@ -34,6 +27,7 @@ export default function EventDashboard() {
       <Grid.Column width={10}>
         {loading && (
           <>
+            <EventList events={events} />
             <EventList events={events} />
           </>
         )}

@@ -4,11 +4,11 @@ import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { signOutFirebase } from "../../App/firestore/fireBaseService";
 import { toastr } from "react-redux-toastr";
+import LoadingComponent from "../../App/layout/LoadingComponent";
 
 export default function SignedInMenu() {
   const history = useHistory();
-  const { currentUser } = useSelector((state) => state.auth);
-
+  const { currentUserProfile } = useSelector((state) => state.profile);
   async function handleSignOut() {
     try {
       history.push("/");
@@ -18,14 +18,17 @@ export default function SignedInMenu() {
     }
   }
 
+  if (!currentUserProfile) return <LoadingComponent content="Loging In..." />;
+
   return (
     <Menu.Item position="right">
-      <Image avatar spaced="right" src=".." />
+      <Image
+        avatar
+        spaced="right"
+        src={currentUserProfile.photoURL || "/assets/user.png"}
+      />
 
-      <Dropdown
-        pointing="top left"
-        text={currentUser && currentUser.displayName}
-      >
+      <Dropdown pointing="top left" text={currentUserProfile.displayName}>
         <Dropdown.Menu>
           <Dropdown.Item
             as={Link}
@@ -33,7 +36,12 @@ export default function SignedInMenu() {
             text="createEvent"
             icon="plus"
           />
-          <Dropdown.Item text="My Profile" icon="user" />
+          <Dropdown.Item
+            as={Link}
+            to={`/profile/${currentUserProfile.id}`}
+            text="My profile"
+            icon="user"
+          />
           <Dropdown.Item
             text="My Account"
             icon="settings"

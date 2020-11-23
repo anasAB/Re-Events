@@ -1,8 +1,8 @@
 import React from "react";
-import { Item, Segment } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { Item, Label, Segment } from "semantic-ui-react";
 
-export default function EventDetaildSideBar({ attendees }) {
-  console.log("##attendees", attendees);
+export default function EventDetaildSideBar({ attendees, hostUid }) {
   return (
     <>
       <Segment
@@ -18,16 +18,28 @@ export default function EventDetaildSideBar({ attendees }) {
       <Segment attached>
         <Item.Group relaxed divided>
           {attendees &&
-            Object.keys(attendees).map((attendee) => (
-              <Item key={attendee.id} style={{ position: "relative" }}>
+            attendees.map((attendee) => (
+              <Item
+                as={Link}
+                to={`/profile/${attendee.id}`}
+                key={attendee.id}
+                style={{ position: "relative" }}
+              >
+                {hostUid === attendee.id && (
+                  <Label
+                    style={{ position: "absolute" }}
+                    color="orange"
+                    ribbon="right"
+                    content="Host"
+                  />
+                )}
                 <Item.Image
                   size="tiny"
-                  src={attendee.photoURL || "/public/assets/user.png"}
+                  src={attendee.photoURL || "/assets/user.png"}
                 />
-
                 <Item.Content verticalAlign="middle">
                   <Item.Header as="h3">
-                    <span>{attendee.name}</span>
+                    <span>{attendee.displayName}</span>
                   </Item.Header>
                 </Item.Content>
               </Item>

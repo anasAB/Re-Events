@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { Button, Confirm, Item, Label, List, Segment } from "semantic-ui-react";
+import {
+  Button,
+  Confirm,
+  Item,
+  Label,
+  List,
+  Segment,
+  Icon,
+} from "semantic-ui-react";
 import EventListAttendee from "./EventListAttendee";
 import { Link } from "react-router-dom";
 import { deletedEventFromFirestore } from "../../../App/firestore/firestoreService";
 import { toastr } from "react-redux-toastr";
+import { format } from "date-fns";
 
 export default function EventListItem({ event }) {
   //**! Handle Delete Event */
@@ -26,10 +35,17 @@ export default function EventListItem({ event }) {
       <Segment>
         <Item.Group>
           <Item>
-            <Item.Image size="tiny" circular src={event.hostPhotoURL} />
+            <Link to={`/profile/${event.hostUid}`}>
+              <Item.Image
+                size="tiny"
+                circular
+                src={(event && event.hostPhotoURL) || "/assets/user.png"}
+              />
+            </Link>
 
             <Item.Content>
               <Item.Header content={event.title} />
+
               <Item.Description>Hosted by {event.hostedBy}</Item.Description>
               {event.isCancelled && (
                 <Label
@@ -45,19 +61,21 @@ export default function EventListItem({ event }) {
       </Segment>
       <Segment>
         <span>
-          {/* <Icon name="clock" /> {format(event.date, "MMMM d, yyyy h:mm a")} */}
-          {/* <Icon name="clock" /> <span>{event.date}</span>
-          <Icon name="marker" /> {event.venue} */}
+          <span>
+            <Icon name="clock" /> {format(event.date, "MMMM d, yyyy h:mm a")}
+            <Icon name="marker" /> {event.venue.address}
+          </span>
         </span>
       </Segment>
+
       <Segment secondary>
         <List horizontal>
-          {event.attendee &&
-            event.attendees.map((attendee) => (
-              <EventListAttendee key={attendee.id} attendee={attendee} />
-            ))}
+          {event.attendees.map((attendee) => (
+            <EventListAttendee key={attendee.id} attendee={attendee} />
+          ))}
         </List>
       </Segment>
+
       <Segment clearing>
         <div>{event.description}</div>
         <Button

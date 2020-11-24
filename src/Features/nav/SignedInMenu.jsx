@@ -18,17 +18,17 @@ export default function SignedInMenu() {
     }
   }
 
-  if (!currentUserProfile) return <LoadingComponent content="Loging In..." />;
+  if (!currentUserProfile) return <LoadingComponent content="Logging In..." />;
 
   return (
     <Menu.Item position="right">
       <Image
         avatar
         spaced="right"
-        src={currentUserProfile.photoURL || "/assets/user.png"}
+        src={currentUserProfile?.photoURL || "/assets/user.png"}
       />
 
-      <Dropdown pointing="top left" text={currentUserProfile.displayName}>
+      <Dropdown pointing="top left" text={currentUserProfile?.displayName}>
         <Dropdown.Menu>
           <Dropdown.Item
             as={Link}
@@ -38,7 +38,7 @@ export default function SignedInMenu() {
           />
           <Dropdown.Item
             as={Link}
-            to={`/profile/${currentUserProfile.id}`}
+            to={`/profile/${currentUserProfile?.id}`}
             text="My profile"
             icon="user"
           />

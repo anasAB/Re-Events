@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import { format } from "date-fns";
+import { toastr } from "react-redux-toastr";
 import { Link } from "react-router-dom";
 import { Button, Header, Image, Item, Segment } from "semantic-ui-react";
+import {
+  addUSerAttendace,
+  cancelUserAttendance,
+} from "../../../App/firestore/firestoreService";
 
-export default function EventDetaildHeader({ event }) {
+export default function EventDetaildHeader({ event, isGoing, isHost }) {
+  const [loading, setLoading] = useState(false);
+
+  async function handlerJoinUserEvent() {
+    setLoading(true);
+    try {
+      await addUSerAttendace(event);
+    } catch (error) {
+      toastr.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleUserLeaveEvent() {
+    setLoading(true);
+    try {
+      await cancelUserAttendance(event);
+    } catch (error) {
+      toastr.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -16,28 +45,48 @@ export default function EventDetaildHeader({ event }) {
                   content={event.title}
                   style={{ color: "white" }}
                 />
-                {/* <p>{event.date}</p> */}
+                <p>{format(event.date, "MMMM d, yyyy h:mm a")}</p>
                 <p>
-                  Hosted by <strong>{event.hostedBy}</strong>
+                  Hosted by{" "}
+                  <strong>
+                    <Link to={`/profile/${event.hostUid}`}>
+                      {event.hostedBy}
+                    </Link>
+                  </strong>
                 </p>
               </Item.Content>
             </Item>
           </Item.Group>
         </Segment>
       </Segment>
+      <Segment attached="bottom" clearing>
+        {!isHost && (
+          <>
+            {isGoing ? (
+              <Button onClick={handleUserLeaveEvent} loading={loading}>
+                Cancel My Place
+              </Button>
+            ) : (
+              <Button
+                onClick={handlerJoinUserEvent}
+                color="teal"
+                loading={loading}
+              >
+                JOIN THIS EVENT
+              </Button>
+            )}
+          </>
+        )}
 
-      <Segment attached="bottom">
-        <Button>Cancel My Place</Button>
-        <Button color="teal">JOIN THIS EVENT</Button>
-
-        <Button
-          as={Link}
-          to={`/manage/${event.id}`}
-          color="orange"
-          floated="right"
-        >
-          Manage Event
-        </Button>
+        {isHost && (
+          <Button
+            as={Link}
+            to={`/manage/${event.id}`}
+            color="orange"
+            floated="right"
+            content=" Manage Event"
+          />
+        )}
       </Segment>
     </Segment.Group>
   );

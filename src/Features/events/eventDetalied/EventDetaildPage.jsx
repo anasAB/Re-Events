@@ -14,10 +14,13 @@ import { Redirect } from "react-router-dom";
 export default function EventDetaildPage({ match }) {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.async);
-
+  const currentUSer = useSelector((state) => state.auth.currentUser);
   const event = useSelector((state) =>
     state.events.events.find((e) => e.id === match.params.id)
   );
+  const isHost = event?.hostUid === currentUSer?.uid;
+  const isGoing =
+    event && event.attendees.some((a) => a.id === currentUSer?.uid);
 
   useFirestoreDocs({
     query: () => listenToEventFromFirestore(match.params.id),
@@ -29,17 +32,19 @@ export default function EventDetaildPage({ match }) {
     return <LoadingComponent content="loading The Event ..." />;
 
   if (error) return <Redirect to="/error" />;
-
   return (
     <Grid>
       <Grid.Column width={10}>
-        <EventDetaildHeader event={event} />
+        <EventDetaildHeader event={event} isHost={isHost} isGoing={isGoing} />
         <EventDetaildInfo event={event} />
         <EventDetaildChat event={event} />
       </Grid.Column>
 
       <Grid.Column width={6}>
-        <EventDetaildSideBar attendees={event?.attendees} />
+        <EventDetaildSideBar
+          attendees={event?.attendees}
+          hostUid={event.hostUid}
+        />
       </Grid.Column>
     </Grid>
   );

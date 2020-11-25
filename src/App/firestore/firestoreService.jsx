@@ -20,9 +20,22 @@ export function dataFromSnapShot(snapshot) {
     id: snapshot.id,
   };
 }
-
-export function listenEventsFromFirestore() {
-  return db.collection("events").orderBy("date");
+//**! get Events */
+export function listenEventsFromFirestore(predicate) {
+  const user = firebase.auth().currentUser;
+  let eventsRef = db.collection("events").orderBy("date");
+  switch (predicate.get("filter")) {
+    case "isGoing":
+      return eventsRef
+        .where("attendeeIds", "array-contains", user.uid)
+        .where("date", ">=", predicate.get("startDate"));
+    case "isHosting":
+      return eventsRef
+        .where("hostUid", "==", user.uid)
+        .where("date", ">=", predicate.get("startDate"));
+    default:
+      return db.collection("events").orderBy("date");
+  }
 }
 
 export function listenToEventFromFirestore(eventId) {
@@ -148,5 +161,25 @@ export async function cancelUserAttendance(event) {
       });
   } catch (error) {
     throw error;
+  }
+}
+
+//**! Query Event Future Past & Hosted*/
+export function getUserEventQuery(activeTab, userId) {
+  const today = new Date();
+  let eventsRef = db.collection("events");
+  switch (activeTab) {
+    case 1: //!Past Event
+      return eventsRef
+        .where("attendeeIds", "array-contains", userId)
+        .where("date", "<=", today)
+        .orderBy("date", "desc");
+
+    case 2:
+      return eventsRef.where("hostUid", "==", userId).orderBy("date");
+    default:
+      return eventsRef
+        .where("attendeeIds", "array-contains", userId)
+        .orderBy("date");
   }
 }

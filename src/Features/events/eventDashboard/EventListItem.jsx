@@ -35,14 +35,16 @@ export default function EventListItem({ event }) {
       <Segment>
         <Item.Group>
           <Item>
-            <Link to={`/profile/${event.hostUid}`}>
-              <Item.Image
-                size="tiny"
-                circular
-                src={(event && event.hostPhotoURL) || "/assets/user.png"}
-              />
-            </Link>
-
+            <Item.Image
+              as={Link}
+              to={`/profile/${event.hostUid}`}
+              size="tiny"
+              circular
+              src={
+                event.hostPhotoURL ??
+                "https://randomuser.me/api/portraits/women/72.jpg"
+              }
+            />
             <Item.Content>
               <Item.Header content={event.title} />
 
@@ -71,11 +73,14 @@ export default function EventListItem({ event }) {
       <Segment secondary>
         <List horizontal>
           {event.attendees.map((attendee) => (
-            <EventListAttendee key={attendee.id} attendee={attendee} />
+            <EventListAttendee
+              key={attendee.id}
+              attendee={attendee}
+              event={event}
+            />
           ))}
         </List>
       </Segment>
-
       <Segment clearing>
         <div>{event.description}</div>
         <Button

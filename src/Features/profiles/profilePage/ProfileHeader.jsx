@@ -17,7 +17,15 @@ export default function ProfileHeader({ profile, isCurrentUser }) {
         <Grid.Column width={12}>
           <Item.Group>
             <Item>
-              <Item.Image avatar size="small" src={profile.photoURL} />
+              <Item.Image
+                avatar
+                size="small"
+                src={
+                  profile.photoURL
+                    ? profile.photoURL
+                    : "https://randomuser.me/api/portraits/women/72.jpg"
+                }
+              />
               <Item.Content verticalAlign="middle">
                 <Header
                   as="h1"

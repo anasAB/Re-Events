@@ -2,6 +2,15 @@ import firebase from "../config/firebase.js";
 import { toastr } from "react-redux-toastr";
 import { setUserProfile } from "./firestoreService.jsx";
 
+//**! Transfer Object into Array */
+export function ObjectInToArray(object) {
+  if (object) {
+    return Object.entries(object).map((e) =>
+      Object.assign({}, e[1], { ChatId: e[0] })
+    );
+  }
+}
+
 //**! signInWithEmail */
 export function signInWithEmail(payload) {
   return firebase
@@ -59,7 +68,7 @@ export function updateUserPassword(newPassword) {
   return user.updatePassword(newPassword.newPassword1);
 }
 
-//! upload Photo to fireBase
+//**! upload Photo to fireBase */
 export function uploadToFirebaseStorage(file, fileName) {
   // const user = firebase.auth().currentUser;
   // const storage = firebase.storage().ref();
@@ -69,4 +78,24 @@ export function uploadToFirebaseStorage(file, fileName) {
   const user = firebase.auth().currentUser;
   const storageRef = firebase.storage().ref();
   return storageRef.child(`${user.uid}/user_images/${fileName}`).put(file);
+}
+
+//**! Add Event to fireBase */
+export function addChatToFireBase(eventId, values) {
+  const user = firebase.auth().currentUser;
+  const newComment = {
+    eventId,
+    displayName: user.displayName,
+    photoURL: user.photoURL,
+    uid: user.uid,
+    text: values.comment,
+    date: Date.now(),
+    // parentId: values.parentId,
+  };
+  return firebase.database().ref(`chat/${eventId}`).push(newComment);
+}
+
+//**! Add CHat to fireBase */
+export function getEventChatRef(eventId) {
+  return firebase.database().ref(`chat/${eventId}`).orderByKey();
 }

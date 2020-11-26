@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid } from "semantic-ui-react";
-import EventDetaildChat from "./EventDetaildChat";
+import EventDetailsChat from "./EventDetailsChat";
 import EventDetaildHeader from "./EventDetaildHeader";
 import EventDetaildInfo from "./EventDetaildInfo";
 import EventDetaildSideBar from "./EventDetaildSidBar";
@@ -37,7 +37,7 @@ export default function EventDetaildPage({ match }) {
       <Grid.Column width={10}>
         <EventDetaildHeader event={event} isHost={isHost} isGoing={isGoing} />
         <EventDetaildInfo event={event} />
-        <EventDetaildChat event={event} />
+        <EventDetailsChat event={event} />
       </Grid.Column>
 
       <Grid.Column width={6}>

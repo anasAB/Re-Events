@@ -3,6 +3,7 @@ import {
   DELETE_EVENT,
   FETCH_EVENTS,
   UPDATE_EVENT,
+  LISTEN_TO_EVENT_CHAT,
 } from "./EventsConstants";
 
 // const toastrOptions = {
@@ -42,5 +43,12 @@ export function updateEvent(payload) {
   return {
     type: UPDATE_EVENT,
     payload,
+  };
+}
+
+export function listenToEventChat(comment) {
+  return {
+    type: LISTEN_TO_EVENT_CHAT,
+    payload: comment,
   };
 }

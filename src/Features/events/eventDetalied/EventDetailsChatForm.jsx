@@ -1,12 +1,16 @@
 import React from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import { addChatToFireBase } from "../../../App/firestore/fireBaseService";
 import MyTextArea from "../../../App/common/form/MyTextArea";
 import { Button } from "semantic-ui-react";
 import { toastr } from "react-redux-toastr";
 import * as Yup from "yup";
 
-export default function EventDetailsChatForm({ eventId }) {
+export default function EventDetailsChatForm({
+  eventId,
+  parentId,
+  closeReplayForm,
+}) {
   return (
     <Formik
       initialValues={{
@@ -17,13 +21,14 @@ export default function EventDetailsChatForm({ eventId }) {
       })}
       onSubmit={async (values, { setSubmitting, setErrors, resetForm }) => {
         try {
-          await addChatToFireBase(eventId, values);
+          await addChatToFireBase(eventId, { ...values, parentId });
           resetForm();
         } catch (error) {
           toastr.error(error.message);
           setErrors({ auth: error.message });
         } finally {
           setSubmitting(false);
+          closeReplayForm({ open: false, commentId: null });
         }
       }}
     >

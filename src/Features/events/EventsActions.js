@@ -4,7 +4,6 @@ import {
   FETCH_EVENTS,
   UPDATE_EVENT,
   LISTEN_TO_EVENT_CHAT,
-  CLEAR_COMMENT,
 } from "./EventsConstants";
 
 // const toastrOptions = {

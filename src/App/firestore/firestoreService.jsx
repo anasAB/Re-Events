@@ -183,3 +183,91 @@ export function getUserEventQuery(activeTab, userId) {
         .orderBy("date");
   }
 }
+
+//**! Following user */
+export async function follower(profile) {
+  const user = firebase.auth().currentUser;
+  const batch = db.batch();
+  console.log("## batch", batch);
+  try {
+    await db
+      .collection("following")
+      .doc(user.uid)
+      .collection("userFollowing")
+      .doc(profile.id)
+      .set({
+        displayName: profile.displayName,
+        photoURL: profile.photoURL,
+        uid: profile.id,
+      });
+
+    await db
+      .collection("following")
+      .doc(profile.id)
+      .collection("userFollowers")
+      .doc(user.uid)
+      .set({
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        uid: user.uid,
+      });
+
+    await db
+      .collection("users")
+      .doc(user.uid)
+      .update({ followingCount: firebase.firestore.FieldValue.increment(1) });
+
+    await db
+      .collection("users")
+      .doc(profile.id)
+      .update({ followerCount: firebase.firestore.FieldValue.increment(1) });
+  } catch (error) {
+    console.log("## Follower Error in FireStoreService");
+    throw error;
+  }
+}
+
+//**! UnFollowing user */
+export async function UnfollowUser(profile) {
+  const user = firebase.auth().currentUser;
+  try {
+    await db
+      .collection("following")
+      .doc(user.uid)
+      .collection("userFollowing")
+      .doc(profile.id)
+      .delete();
+
+    await db
+      .collection("following")
+      .doc(user.uid)
+      .collection("userFollowers")
+      .doc(profile.id)
+      .delete();
+
+    //! Decrement follower by 1
+    await db
+      .collection("users")
+      .doc(user.uid)
+      .update({
+        followingCount: firebase.firestore.FieldValue.increment(-1),
+      });
+
+    await db
+      .collection("users")
+      .doc(profile.id)
+      .update({ followerCount: firebase.firestore.FieldValue.increment(-1) });
+  } catch (error) {
+    console.log("## Follower Error in FireStoreService");
+    throw error;
+  }
+}
+
+//**! get Followers */
+export function getFollowersCollection(profileId) {
+  return db.collection("following").doc(profileId).collection("userFollowers");
+}
+
+export function getFollowingCollection(profileId) {
+  return db.collection("following").doc(profileId).collection("userFollowing");
+}

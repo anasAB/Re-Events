@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import {
   Button,
   Divider,
@@ -9,8 +10,40 @@ import {
   Segment,
   Statistic,
 } from "semantic-ui-react";
+import {
+  follower,
+  UnfollowUser,
+} from "../../../App/firestore/firestoreService";
 
 export default function ProfileHeader({ profile, isCurrentUser }) {
+  const [loader, setLoader] = useState(false);
+
+  async function handleFollower() {
+    try {
+      setLoader(true);
+      await follower(profile);
+    } catch (error) {
+      console.log("## Error in Profile Header");
+      setLoader(false);
+      throw error;
+    } finally {
+      setLoader(false);
+    }
+  }
+
+  async function handleUnFollower() {
+    try {
+      setLoader(true);
+      await UnfollowUser(profile);
+    } catch (error) {
+      console.log("## Error in Profile Header");
+      setLoader(false);
+      throw error;
+    } finally {
+      setLoader(false);
+    }
+  }
+
   return (
     <Segment>
       <Grid>
@@ -49,8 +82,20 @@ export default function ProfileHeader({ profile, isCurrentUser }) {
                   <Button fluid color="teal" content="Following" />
                 </Reveal.Content>
 
-                <Reveal.Content hidden style={{ width: "100%" }}>
+                <Reveal.Content
+                  onClick={handleFollower}
+                  hidden
+                  style={{ width: "100%" }}
+                >
                   <Button basic color="red" content="UnFollowing" />
+                </Reveal.Content>
+                <Reveal.Content visible style={{ width: "100%" }}>
+                  <Button
+                    onClick={handleUnFollower}
+                    fluid
+                    color="red"
+                    content="UnFollowing"
+                  />
                 </Reveal.Content>
               </Reveal>
             </>

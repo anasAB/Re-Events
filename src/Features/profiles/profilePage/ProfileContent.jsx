@@ -29,11 +29,23 @@ export default function ProfileContent({ profile, isCurrentUser }) {
     },
     {
       menuItem: "Followers",
-      render: () => <FollowingTab profile={profile} activeTab={activeTab} />,
+      render: () => (
+        <FollowingTab
+          profile={profile}
+          activeTab={activeTab}
+          key={profile.id}
+        />
+      ),
     },
     {
       menuItem: "Following",
-      render: () => <FollowingTab profile={profile} activeTab={activeTab} />,
+      render: () => (
+        <FollowingTab
+          profile={profile}
+          activeTab={activeTab}
+          key={profile.id}
+        />
+      ),
     },
   ];
 

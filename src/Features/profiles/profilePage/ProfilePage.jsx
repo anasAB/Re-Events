@@ -13,7 +13,7 @@ export default function ProfilePage({ match }) {
   const { selectedUserProfile } = useSelector((state) => state.profile);
   const { currentUser } = useSelector((state) => state.auth);
   const { loading, error } = useSelector((state) => state.async);
-
+  console.log("## currentUser", currentUser);
   useFirestoreDocs({
     query: () => getUserProfile(match.params.id),
     data: (profile) => dispatch(listenToSelectedUserProfile(profile)),

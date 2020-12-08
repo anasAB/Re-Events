@@ -188,39 +188,41 @@ export function getUserEventQuery(activeTab, userId) {
 export async function follower(profile) {
   const user = firebase.auth().currentUser;
   const batch = db.batch();
-  console.log("## batch", batch);
   try {
-    await db
-      .collection("following")
-      .doc(user.uid)
-      .collection("userFollowing")
-      .doc(profile.id)
-      .set({
+    batch.set(
+      db
+        .collection("following")
+        .doc(user.uid)
+        .collection("userFollowing")
+        .doc(profile.id),
+      {
         displayName: profile.displayName,
         photoURL: profile.photoURL,
         uid: profile.id,
-      });
+      }
+    );
 
-    await db
-      .collection("following")
-      .doc(profile.id)
-      .collection("userFollowers")
-      .doc(user.uid)
-      .set({
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-        uid: user.uid,
-      });
+    // batch.set(
+    //   db
+    //     .collection("following")
+    //     .doc(profile.id)
+    //     .collection("userFollowers")
+    //     .doc(user.uid),
+    //   {
+    //     displayName: user.displayName,
+    //     photoURL: user.photoURL,
+    //     uid: user.uid,
+    //   }
+    // );
 
-    await db
-      .collection("users")
-      .doc(user.uid)
-      .update({ followingCount: firebase.firestore.FieldValue.increment(1) });
+    batch.update(db.collection("users").doc(user.uid), {
+      followingCount: firebase.firestore.FieldValue.increment(1),
+    });
 
-    await db
-      .collection("users")
-      .doc(profile.id)
-      .update({ followerCount: firebase.firestore.FieldValue.increment(1) });
+    // batch.update(db.collection("users").doc(profile.id), {
+    //   followerCount: firebase.firestore.FieldValue.increment(1),
+    // });
+    return batch.commit();
   } catch (error) {
     console.log("## Follower Error in FireStoreService");
     throw error;
@@ -230,44 +232,55 @@ export async function follower(profile) {
 //**! UnFollowing user */
 export async function UnfollowUser(profile) {
   const user = firebase.auth().currentUser;
+  const batch = db.batch();
   try {
-    await db
-      .collection("following")
-      .doc(user.uid)
-      .collection("userFollowing")
-      .doc(profile.id)
-      .delete();
+    batch.delete(
+      db
+        .collection("following")
+        .doc(user.uid)
+        .collection("userFollowing")
+        .doc(profile.id)
+    );
 
-    await db
-      .collection("following")
-      .doc(user.uid)
-      .collection("userFollowers")
-      .doc(profile.id)
-      .delete();
+    // batch.delete(
+    //   db
+    //     .collection("following")
+    //     .doc(user.uid)
+    //     .collection("userFollowers")
+    //     .doc(profile.id)
+    // );
 
     //! Decrement follower by 1
-    await db
-      .collection("users")
-      .doc(user.uid)
-      .update({
-        followingCount: firebase.firestore.FieldValue.increment(-1),
-      });
+    batch.update(db.collection("users").doc(user.uid), {
+      followingCount: firebase.firestore.FieldValue.increment(-1),
+    });
 
-    await db
-      .collection("users")
-      .doc(profile.id)
-      .update({ followerCount: firebase.firestore.FieldValue.increment(-1) });
+    // batch.update(db.collection("users").doc(profile.id), {
+    //   followerCount: firebase.firestore.FieldValue.increment(-1),
+    // });
+    return await batch.commit();
   } catch (error) {
     console.log("## Follower Error in FireStoreService");
     throw error;
   }
 }
 
-//**! get Followers */
+//**! get Followers & Following */
 export function getFollowersCollection(profileId) {
   return db.collection("following").doc(profileId).collection("userFollowers");
 }
 
 export function getFollowingCollection(profileId) {
   return db.collection("following").doc(profileId).collection("userFollowing");
+}
+
+//**! get Following Doc */
+export function getFollowingDoc(profileId) {
+  const userUid = firebase.auth().currentUser.uid;
+  return db
+    .collection("following")
+    .doc(userUid)
+    .collection("userFollowing")
+    .doc(profileId)
+    .get();
 }

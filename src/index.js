@@ -12,9 +12,21 @@ import { configuration } from "./App/store/ConfigureStore";
 import ScrollToTop from "./App/layout/ScrollToTop";
 import ReduxToastr from "react-redux-toastr";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 
 const rootEl = document.getElementById("root");
 const store = configuration();
+
+Sentry.init({
+  dsn:
+    "https://6ef1cc02db734fb9a36cc497d8ae4702@o487611.ingest.sentry.io/5546560",
+  integrations: [new Integrations.BrowserTracing()],
+
+  // We recommend adjusting this value in production, or using tracesSampler
+  // for finer control
+  tracesSampleRate: 1.0,
+});
 
 function render() {
   ReactDOM.render(

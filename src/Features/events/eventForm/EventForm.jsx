@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Confirm, Header, Segment } from "semantic-ui-react";
 import { Link, Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { listenToEvents } from "../EventsActions";
+import { listenToSelectedEvents } from "../EventsActions";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MyTextInput from "../../../App/common/form/MyTextInput";
@@ -22,10 +22,8 @@ import { toastr } from "react-redux-toastr";
 
 export default function EventForm({ match, history }) {
   const dispatch = useDispatch();
-  const selecteDEvent = useSelector((state) =>
-    state.events.events.find((e) => e.id === match.params.id)
-  );
 
+  const { selectedEvent } = useSelector((state) => state.events);
   const { loading, error } = useSelector((state) => state.async);
 
   //**! Cancel and Activeiate event*/
@@ -55,7 +53,7 @@ export default function EventForm({ match, history }) {
     }
   }
 
-  const initialValues = selecteDEvent ?? {
+  const initialValues = selectedEvent ?? {
     id: "",
     title: "",
     category: "",
@@ -81,7 +79,7 @@ export default function EventForm({ match, history }) {
   useFirestoreDocs({
     shouldExecute: !!match.params.id,
     query: () => listenToEventFromFirestore(match.params.id),
-    data: (event) => dispatch(listenToEvents([event])),
+    data: (event) => dispatch(listenToSelectedEvents(event)),
     deps: [match.params.id, dispatch],
   });
 
@@ -90,13 +88,13 @@ export default function EventForm({ match, history }) {
 
   return (
     <Segment clearing>
-      <Header content={selecteDEvent ? "Edit Event" : "create new Event"} />
+      <Header content={selectedEvent ? "Edit Event" : "create new Event"} />
       <Formik
         validationSchema={validation}
         initialValues={initialValues}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            selecteDEvent
+            selectedEvent
               ? await updateEventToFirestore(values)
               : await addEventToFirestore(values);
             setSubmitting(false);
@@ -129,19 +127,19 @@ export default function EventForm({ match, history }) {
             <Button
               loading={isSubmitting}
               disabled={!isValid || !dirty || isSubmitting}
-              content={selecteDEvent ? "Edit Event" : "Creat Event"}
+              content={selectedEvent ? "Edit Event" : "Creat Event"}
               type="submit"
               floated="right"
               positive
               name="submit"
             />
-            {selecteDEvent && (
+            {selectedEvent && (
               <Button
                 loading={loadingCancel}
                 onClick={() => setConformOpen(true)}
                 name="cancel"
-                content={selecteDEvent.isCancelled ? "Activate" : "Cancel"}
-                color={selecteDEvent.isCancelled ? "green" : "red"}
+                content={selectedEvent.isCancelled ? "Activate" : "Cancel"}
+                color={selectedEvent.isCancelled ? "green" : "red"}
                 type="button"
                 floated="left"
               />
@@ -153,13 +151,13 @@ export default function EventForm({ match, history }) {
       </Formik>
       <Confirm
         content={
-          selecteDEvent?.isCancelled
+          selectedEvent?.isCancelled
             ? "this will reactivate the event"
             : "this will cancel reactivate the event"
         }
         open={conformOpen}
         onCancel={() => setConformOpen(false)}
-        onConfirm={() => handleCancelToggle(selecteDEvent)}
+        onConfirm={() => handleCancelToggle(selectedEvent)}
       />
     </Segment>
   );

@@ -7,7 +7,7 @@ import EventDetaildInfo from "./EventDetaildInfo";
 import EventDetaildSideBar from "./EventDetaildSidBar";
 import useFirestoreDocs from "../../../App/hooks/useFirestoreDocs";
 import { listenToEventFromFirestore } from "../../../App/firestore/firestoreService";
-import { listenToEvents } from "../EventsActions";
+import { listenToSelectedEvents } from "../EventsActions";
 import LoadingComponent from "../../../App/layout/LoadingComponent";
 import { Redirect } from "react-router-dom";
 
@@ -15,16 +15,14 @@ export default function EventDetaildPage({ match }) {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.async);
   const currentUSer = useSelector((state) => state.auth.currentUser);
-  const event = useSelector((state) =>
-    state.events.events.find((e) => e.id === match.params.id)
-  );
+  const event = useSelector((state) => state.events.selectedEvent);
   const isHost = event?.hostUid === currentUSer?.uid;
   const isGoing =
     event && event.attendees.some((a) => a.id === currentUSer?.uid);
 
   useFirestoreDocs({
     query: () => listenToEventFromFirestore(match.params.id),
-    data: (event) => dispatch(listenToEvents([event])),
+    data: (event) => dispatch(listenToSelectedEvents(event)),
     deps: [match.params.id, dispatch],
   });
 

@@ -21,9 +21,17 @@ export function dataFromSnapShot(snapshot) {
   };
 }
 //**! get Events */
-export function listenEventsFromFirestore(predicate) {
+export function fetchEventsFromFirestore(
+  predicate,
+  limit,
+  lastDocSnapshot = null
+) {
   const user = firebase.auth().currentUser;
-  let eventsRef = db.collection("events").orderBy("date");
+  let eventsRef = db
+    .collection("events")
+    .orderBy("date")
+    .startAfter(lastDocSnapshot)
+    .limit(limit);
   switch (predicate.get("filter")) {
     case "isGoing":
       return eventsRef
@@ -34,7 +42,8 @@ export function listenEventsFromFirestore(predicate) {
         .where("hostUid", "==", user.uid)
         .where("date", ">=", predicate.get("startDate"));
     default:
-      return db.collection("events").orderBy("date");
+      return eventsRef;
+    // return eventsRef.where("date", "<=", predicate.get("startDate"));
   }
 }
 

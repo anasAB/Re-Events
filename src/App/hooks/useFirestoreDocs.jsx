@@ -32,7 +32,7 @@ export default function useFirestoreDocs({
         data(dataFromSnapShot(snapshot));
         dispatch(asyncActionFINISH());
       },
-      (error) => dispatch(asyncActionERROR())
+      (error) => dispatch(asyncActionERROR(error))
     );
     return () => {
       unsubscribe();

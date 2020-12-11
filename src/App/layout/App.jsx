@@ -13,6 +13,7 @@ import SandBox from "../../Features/sadbox/SandBox";
 import ErrorComponent from "../common/errors/errorComponent";
 import ModalManger from "../common/modal/ModalManger";
 import LoadingComponent from "./LoadingComponent";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   const { key } = useLocation();

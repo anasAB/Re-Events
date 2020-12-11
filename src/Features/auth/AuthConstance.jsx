@@ -5,6 +5,7 @@ import {
   getUserProfile,
 } from "../../App/firestore/firestoreService.jsx";
 import { listenToCurrentUserProfile } from "../profiles/ProfileActions.jsx";
+import { LOCATION_CHANGE } from "connected-react-router";
 
 export const SIGN_IN = "SIGN_IN";
 export const SIGN_OUT = "SIGN_OUT";
@@ -44,6 +45,8 @@ export function signOut() {
 const InitialState = {
   authenticated: false,
   currentUser: null,
+  prevLocation: null,
+  currentLocation: null,
 };
 
 export default function authReducer(state = InitialState, { type, payload }) {
@@ -65,6 +68,12 @@ export default function authReducer(state = InitialState, { type, payload }) {
         ...state,
         authenticated: false,
         currentUser: null,
+      };
+    case LOCATION_CHANGE:
+      return {
+        ...state,
+        prevLocation: state.currentLocation,
+        currentLocation: payload.location,
       };
     default:
       return state;

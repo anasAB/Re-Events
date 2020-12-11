@@ -13,12 +13,18 @@ import { Link } from "react-router-dom";
 import { deletedEventFromFirestore } from "../../../App/firestore/firestoreService";
 import { toastr } from "react-redux-toastr";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
 
 export default function EventListItem({ event }) {
   //**! Handle Delete Event */
   const [confromOpen, setConfromOpen] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
 
+  const hostUid = useSelector((state) =>
+    state.events.events.map((item) => item.hostUid)
+  );
+
+  const currentUser = useSelector((state) => state.auth.currentUser?.uid);
   async function handleDeleteEvent(event) {
     setLoadingDelete(true);
     try {
@@ -92,6 +98,7 @@ export default function EventListItem({ event }) {
           color="red"
           floated="right"
           content="Delete"
+          disabled={hostUid != currentUser}
         />
         <Button
           as={Link}

@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid, Loader } from "semantic-ui-react";
+import { Grid, Loader } from "semantic-ui-react";
 import EventList from "./EventList";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingComponent from "../../../App/layout/LoadingComponent";
 import EventFilters from "./EventFilter";
 import { clearEvents, fetchEvents } from "../EventsActions";
 
 export default function EventDashboard() {
-  const dispatch = useDispatch();
-  // const { events, moreEvents } = useSelector((state) => state.events);
-  // const { loading } = useSelector((state) => state.async);
-
-  // const limit = 2;
-  // const [lastDocSnapshot, setLastDocSnapshot] = useState(null);
-  // const [loadingInitial, setLoadingInitial] = useState(false);
   const limit = 2;
+  const dispatch = useDispatch();
   const { events, moreEvents } = useSelector((state) => state.events);
   const { loading } = useSelector((state) => state.async);
   const { authenticated } = useSelector((state) => state.auth);
@@ -61,7 +54,6 @@ export default function EventDashboard() {
             <EventListItemPlaceholder />
           </>
         )} */}
-        <EventList events={events} />
         <EventList
           events={events}
           getNextEvents={handleFetchNextEvents}

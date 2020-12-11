@@ -5,13 +5,13 @@ import App from "./App/layout/App";
 import * as serviceWorker from "./serviceWorker";
 import "semantic-ui-css/semantic.min.css";
 import "react-calendar/dist/Calendar.css";
-import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { Provider } from "react-redux";
-import { configuration } from "./App/store/ConfigureStore";
+import { configuration, history } from "./App/store/ConfigureStore";
 import ScrollToTop from "./App/layout/ScrollToTop";
 import ReduxToastr from "react-redux-toastr";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
+import { ConnectedRouter } from "connected-react-router";
 
 const rootEl = document.getElementById("root");
 const store = configuration();
@@ -19,7 +19,7 @@ const store = configuration();
 function render() {
   ReactDOM.render(
     <Provider store={store}>
-      <BrowserRouter>
+      <ConnectedRouter history={history}>
         <ScrollToTop />
         <ReduxToastr
           timeOut={4000}
@@ -33,7 +33,7 @@ function render() {
           closeOnToastrClick
         />
         <App />
-      </BrowserRouter>
+      </ConnectedRouter>
     </Provider>,
     rootEl
   );
